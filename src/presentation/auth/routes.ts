@@ -1,17 +1,15 @@
 import { Router } from "express";
+import { AuthController } from "./controller";
 
 export class AuthRoutes {
   static get routes(): Router {
     // use static method if we don't have to do DI (Dependency Injection)
     const router = Router();
+    const controller = new AuthController();
 
-    router.post("/login", (req, res) => {
-      res.json("Login");
-    });
+    router.post("/register", controller.registerUser);
 
-    router.post("/register", (req, res) => {
-      res.json("Register");
-    });
+    router.post("/login", controller.loginUser);
 
     return router;
   }
