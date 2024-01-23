@@ -20,6 +20,12 @@ export class Server {
   }
 
   async start() {
+    //Middlewares
+
+    // To parse the data
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
+
     // Make server use the defined routes
     this.app.use(this.routes);
 
