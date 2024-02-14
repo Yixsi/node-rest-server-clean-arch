@@ -1,8 +1,10 @@
-import { RegisterUserDto } from "../dtos";
+import { RegisterUserDto, LoginUserDto } from "../dtos";
 import { User } from "../entities";
 
 export abstract class AuthDatasource {
   // we use abstract to not allow having instances of this class
+
+  abstract login(loginUserDto: LoginUserDto): Promise<User>;
 
   abstract register(registerUserDto: RegisterUserDto): Promise<User>;
   // it returns a Promise as the requests are async, and the type is User which is our entity

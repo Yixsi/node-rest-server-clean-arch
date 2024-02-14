@@ -9,7 +9,6 @@ export class AppRoutes {
     // Define main routes
 
     router.use("/api/auth", AuthRoutes.routes);
-    // router.use("/api/user");
 
     return router;
   }

@@ -4,6 +4,7 @@ import {
   AuthDatasource,
   CustomError,
   RegisterUserDto,
+  LoginUserDto,
   User,
 } from "../../domain";
 import { UserMapper } from "../mappers/user.mapper";
@@ -35,6 +36,29 @@ export class AuthDatasourceImpl implements AuthDatasource {
       // map the response
       return UserMapper.userEntityFromObject(user);
     } catch (error) {
+      if (error instanceof CustomError) throw error;
+
+      throw CustomError.internalServer("Unexpected error");
+    }
+  }
+
+  async login(loginUserDto: LoginUserDto): Promise<User> {
+    const { email, password } = loginUserDto;
+    try {
+      // hash password
+      const user = await UserModel.findOne({ email });
+
+      if (!user) throw CustomError.badRequest("Invalid credentials");
+
+      const isValidPassword = this.compare(password, user.password);
+
+      if (!isValidPassword)
+        throw CustomError.unauthorized("Invalid credentials");
+
+      // map the response
+      return UserMapper.userEntityFromObject(user);
+    } catch (error) {
+      console.error(error);
       if (error instanceof CustomError) throw error;
 
       throw CustomError.internalServer("Unexpected error");
